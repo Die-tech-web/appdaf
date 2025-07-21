@@ -1,9 +1,25 @@
 {
-    "name": "root/html",
-    "autoload": {
-        "psr-4": {
-            "AppDAF\\API\\": "src/"
-        }
-    },
-    "require": {}
+  "name": "madie/app-daf",
+  "autoload": {
+    "psr-4": {
+      "Madie\\AppDaf\\": "src/",
+      "Madie\\Maxitsasn\\": "src/",
+      "App\\Core\\Abstract\\": "app/core/abstract/",
+      "App\\Core\\": "app/core/",
+      "App\\Controller\\": "src/controller/",
+      "App\\Entity\\": "src/entity/",
+      "App\\Repository\\": "src/repository/",
+      "App\\Service\\": "src/service/",
+      "App\\Config\\": "app/config"
+    }
+  },
+  "authors": [
+    {
+      "name": "Die-tech-web",
+      "email": "dieniang32@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
 }
