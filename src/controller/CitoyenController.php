@@ -7,17 +7,18 @@ use App\Service\CitoyenService;
 use App\Entity\CitoyenRepository;
 use App\Core\Database;
 
+
 class CitoyenController extends AbstractController
 {
     private CitoyenService $citoyenservice;
 
     public function __construct()
     {
-        $citoyenrepository = new CitoyenRepository((new Database())->getConnection());
+        $citoyenrepository = new CitoyenRepository();
         $this->citoyenservice = new CitoyenService($citoyenrepository);
     }
 
-   
+
     public function find(string $cni): void
     {
         $this->handleCitoyenSearch($cni);
@@ -56,13 +57,13 @@ class CitoyenController extends AbstractController
 
         $this->jsonResponse([
             'data' => [
-                'nci'       => $citoyen->getCni(),
-                'nom'       => $citoyen->getNom(),
-                'prenom'    => $citoyen->getPrenom(),
-                'date'      => $citoyen->getDate(),
-                'lieu'      => $citoyen->getAdresse(),
-                'cnirecto'  => $citoyen->getCnirecto(),
-                'cniverso'  => $citoyen->getCniverso()
+                'nci' => $citoyen->getCni(),
+                'nom' => $citoyen->getNom(),
+                'prenom' => $citoyen->getPrenom(),
+                'date_naissance' => $citoyen->getDateNaissance(),
+                'lieu_naissance' => $citoyen->getLieuNaissance(),
+                'cni_recto_url' => $citoyen->getCnirecto(),
+                'cni_verso_url' => $citoyen->getCniverso()
             ],
             'statut' => 'success',
             'code' => 200,

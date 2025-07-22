@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Citoyen;
 use App\Entity\CitoyenRepository;
+use Src\Entity\CitoyenEntity;
 
 class CitoyenService
 {
@@ -14,8 +15,9 @@ class CitoyenService
         $this->CitoyenRepository = $citoyenrepository;
     }
 
-    public function getCitoyenByCni(string $cni): ?Citoyen
+    public function getCitoyenByCni(string $cni): ?CitoyenEntity
     {
         return $this->repository->selectByCni($cni);
+
     }
 }

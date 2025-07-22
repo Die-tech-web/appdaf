@@ -1,56 +1,48 @@
 <?php
 namespace Src\Entity;
 
-use SetterGetter;
-use Status;
-class LogEntity extends SetterGetter
+use App\Entity\AbstractEntity;
+use App\Entity\Statut;
+
+class LogEntity extends AbstractEntity
 {
     private int $id;
     private string $date;
     private string $heure;
     private string $localisation;
-    private Status $status;
+    private string $ip_address;
+    private Statut $statut;
 
-    public function __construct(string $date, string $heure, string $localisation, Status $status)
+    public function __construct(string $date, string $heure, string $localisation, string $ip_address, Statut $statut)
+        {
+            $this->date = $date;
+            $this->heure = $heure;
+            $this->localisation = $localisation;
+            $this->ip_address = $ip_address;
+            $this->statut = $statut;
+
+        }
+    public function toArray(): array
     {
-        $this->date = $date;
-        $this->heure = $heure;
-        $this->localisation = $localisation;
-        $this->satut = $status;
+        return [
+            'id' => $this->id,
+            'date' => $this->date,
+            'heure' => $this->heure,
+            'localisation' => $this->localisation,
+            'ip_address' => $this->ip_address,
+            // 'statut' => $this->statut->getValue(),
+        ];
 
     }
 
-    // public function getDate(): string
-    // {
-    //     return $this->date;
-    // }
-    // public function setDate(string $date): void
-    // {
-    //     $this->date = $date;
-    // }
-    // public function getHeure(): string
-    // {
-    //     return $this->heure;
-    // }
-    // public function setHeure(string $heure): void
-    // {
-    //     $this->heure = $heure;
-    // }
-    // public function getLocalisation(): string
-    // {
-    //     return $this->localisation;
-    // }
-    // public function setLocalisation(string $localisation): void
-    // {
-    //     $this->localisation = $localisation;
-    // }
-    // public function getStatut(): Status
-    // {
-    //     return $this->status;
-    // }
-    // public function setStatus(Status $status): void
-    // {
-    //     $this->satut = $status;
-    // }
+    public static function toObject($data): static
+        {
+            return new static(
+                $data['date'],
+                $data['heure'],
+                $data['localisation'],
+                $data['ip_adress'],
+                // new Statut($data['statut'])
+            );
+        }
 }
-

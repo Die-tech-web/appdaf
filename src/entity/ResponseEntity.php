@@ -16,7 +16,6 @@ class Response
     }
 
 
-
     public function toArray(): array
     {
         return [
@@ -25,5 +24,9 @@ class Response
             'code' => $this->code,
             'message' => $this->message,
         ];
+    }
+    public function toObject(): object
+    {
+        return (object) $this->toArray();
     }
 }

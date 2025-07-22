@@ -5,7 +5,7 @@ use PDO;
 use Src\Entity\CitoyenEntity;
 
 class CitoyenRepository extends CitoyenEntity
-{ 
+{
     private PDO $pdo;
 
     public function __construct(PDO $pdo)
