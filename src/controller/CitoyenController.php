@@ -1,73 +1,63 @@
 <?php
-
 namespace App\Controller;
 
-use App\Core\AbstractController;
 use App\Service\CitoyenService;
-use App\Entity\CitoyenRepository;
-use App\Core\Database;
-
+use App\Core\abstract\AbstractController;
+use App\Entity\Response;
+use App\Entity\Statut;
 
 class CitoyenController extends AbstractController
 {
-    private CitoyenService $citoyenservice;
+    private CitoyenService $citoyenService;
 
-    public function __construct()
+    public function __construct(CitoyenService $citoyenService)
     {
-        $citoyenrepository = new CitoyenRepository();
-        $this->citoyenservice = new CitoyenService($citoyenrepository);
+        $this->citoyenService = $citoyenService;
     }
 
-
-    public function find(string $cni): void
+    public function rechercherParCni(): void
     {
-        $this->handleCitoyenSearch($cni);
-    }
+        $input = json_decode(file_get_contents('php://input'), true);
+        $cni = $input['cni'] ?? null;
 
-    public function recherche(): void
-    {
-        $payload = $this->getJsonBody();
-
-        if (empty($payload['cni'])) {
-            $this->jsonResponse([
-                'data' => null,
-                'statut' => 'error',
-                'code' => 400,
-                'message' => 'Le champ CNI est requis'
-            ], 400);
+        if (!$cni) {
+            $response = new ResponseEntity(
+                null,
+                Statut::ERROR,
+                400,
+                'Le champ CNI est requis'
+            );
+            $this->renderJson($response);
             return;
         }
 
-        $this->handleCitoyenSearch($payload['cni']);
-    }
+        $citoyen = $this->citoyenService->rechercherParCni($cni);
 
-    private function handleCitoyenSearch(string $cni): void
-    {
-        $citoyen = $this->citoyenservice->getCitoyenByCni($cni);
+        if ($citoyen) {
 
-        if (!$citoyen) {
-            $this->jsonResponse([
-                'data' => null,
-                'statut' => 'error',
-                'code' => 404,
-                'message' => 'Le numéro de carte d\'identité non retrouvé'
-            ], 404);
-            return;
+
+            $response = new Response(
+                $citoyen,
+                Statut::SUCCES,
+                200,
+                "Le numéro de carte d'identité a été retrouvé"
+            );
+
+        } else {
+            $response = new Response(
+                null,
+                Statut::ERROR,
+                404,
+                "Le numéro de carte d'identité non retrouvé"
+            );
         }
 
-        $this->jsonResponse([
-            'data' => [
-                'nci' => $citoyen->getCni(),
-                'nom' => $citoyen->getNom(),
-                'prenom' => $citoyen->getPrenom(),
-                'date_naissance' => $citoyen->getDateNaissance(),
-                'lieu_naissance' => $citoyen->getLieuNaissance(),
-                'cni_recto_url' => $citoyen->getCnirecto(),
-                'cni_verso_url' => $citoyen->getCniverso()
-            ],
-            'statut' => 'success',
-            'code' => 200,
-            'message' => 'Le numéro de carte d\'identité a été retrouvé'
-        ], 200);
+        $this->renderJson($response);
     }
+
+    // Implémentation obligatoire, tu peux laisser vide ou l’utiliser plus tard
+    public function show(): void
+    {
+    }
+
 }

@@ -3,21 +3,29 @@
 namespace App\Service;
 
 use App\Entity\Citoyen;
-use App\Entity\CitoyenRepository;
 use Src\Entity\CitoyenEntity;
+
+use App\Repository\CitoyenRepository;
+
+
+namespace App\Service;
+
+use App\Repository\CitoyenRepository;
+use App\Entity\Citoyen;
 
 class CitoyenService
 {
-    private CitoyenRepository $repository;
+    private CitoyenRepository $citoyenRepository;
 
-    public function __construct(CitoyenRepository $citoyenrepository)
+    public function __construct(CitoyenRepository $citoyenRepository)
     {
-        $this->CitoyenRepository = $citoyenrepository;
+        $this->citoyenRepository = $citoyenRepository;
     }
 
-    public function getCitoyenByCni(string $cni): ?CitoyenEntity
+    public function rechercherParCni(string $cni): ?Citoyen
     {
-        return $this->repository->selectByCni($cni);
-
+        return $this->citoyenRepository->selectByCni($cni);
     }
+
+
 }

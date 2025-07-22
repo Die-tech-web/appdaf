@@ -58,7 +58,7 @@ $cloud = require __DIR__ . '/../app/config/cloudinary.php';
 
 
 
-<?php
+
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -77,56 +77,7 @@ $password = $_ENV['DB_PASSWORD'] ?? 'madie';
 
 $dsn = "$driver:host=$host;port=$port;dbname=$dbname";
 
-try {
-    $pdo = new PDO($dsn, $user, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
 
-    echo "✅ Connexion réussie à la base de données\n";
-
-    $pdo->exec("DELETE FROM log;");
-    $pdo->exec("DELETE FROM citoyen;");
-
-    echo "♻️  Tables vidées avec succès.\n";
-
-    $sqlCitoyens = "
-        INSERT INTO citoyen (nom, prenom, date_naissance, lieu_naissance, cni, cni_recto_url, cni_verso_url)
-        VALUES 
-        ('Diop', 'Mamadou', '1990-05-12', 'Dakar', 'CNI1234567890', 
-         'https://drive.google.com/uc?id=1A2B3C4D5E6F7G8H9I0J_recto', 
-         'https://drive.google.com/uc?id=1A2B3C4D5E6F7G8H9I0J_verso'),
-
-        ('Fall', 'Awa', '1985-09-23', 'Thiès', 'CNI9876543210',
-         'https://www.dropbox.com/s/example/cni9876543210_recto.jpg?dl=1',
-         'https://www.dropbox.com/s/example/cni9876543210_verso.jpg?dl=1'),
-
-        ('Ba', 'Cheikh', '1993-02-01', 'Saint-Louis', 'CNI4567891230',
-         'https://images.unsplash.com/photo-1592194996308-7b43878e84a6',
-         'https://images.unsplash.com/photo-1592195000206-3e8a86c8ef1e');
-    ";
-
-    $pdo->exec($sqlCitoyens);
-    echo "✅ Données insérées dans la table 'citoyen'.\n";
-
-   
-    $sqlLogs = "
-        INSERT INTO log (date, heure, localisation, ip_address, statut)
-        VALUES 
-        ('2025-07-21', '14:30:00', 'Dakar - Plateau', '192.168.1.10', 'SUCCES'),
-
-        ('2025-07-21', '15:45:12', 'Thiès - Grand Standing', '192.168.1.11', 'ERROR'),
-
-        ('2025-07-20', '09:15:05', 'Saint-Louis - Centre-ville', '10.0.0.1', 'SUCCES');
-    ";
-
-    $pdo->exec($sqlLogs);
-    echo " Données insérées dans la table 'log'.\n";
-
-    echo " Seeder exécuté avec succès.\n";
-
-} catch (PDOException $e) {
-    echo " Erreur : " . $e->getMessage() . "\n";
-}
 
 
 
